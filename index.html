@@ -1,74 +1,635 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
+    <title>Yum Yum - Recipe App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-logo i {
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #667eea;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-login:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-logout {
+            background: #ff4757;
+            color: white;
+        }
+
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 5%;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Categories */
+        .categories {
+            padding: 2rem 5%;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem 1rem;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .category-card i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-card.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        /* Recipe Grid */
+        .recipes {
+            padding: 2rem 5%;
+            background: #f5f5f5;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .recipe-content {
+            padding: 1.5rem;
+        }
+
+        .recipe-category {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: #667eea;
+            color: white;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recipe-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .recipe-meta i {
+            color: #667eea;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-footer {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+
+        .modal-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .user-info i {
+            color: #667eea;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                right: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: white;
+                width: 200px;
+                padding: 2rem;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+                transition: right 0.3s;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+
+</head>
 <body>
-    <div class="hero">
-        <div class="nav-bar">
-            <div class="nav-logo">
-                <img src="logo.jpg" height="60" width="60">
-            </div>
-            <div class="nav-links" id="nav-links">
-                <i class="fa fa-close" onclick="closeMenu()" ></i>
-                <ul>
-                    <a href="">
-                        <li>HOME </li>
-                    </a>
-                    <a href="">
-                        <li> ABOUT</li>
-                    </a>
-                    <a href="">
-                        <li>RECIPE </li>
-                    </a>
-                </ul>
-                <button type="button" class="btn">SIGN UP</button>
-            </div>
-            <i class="fa fa-bars" onclick="showMenu()" ></i>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fas fa-utensils"></i>
+            <span>Yum Yum</span>
         </div>
-        <div class="banner-title">
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#recipes">Recipes</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <div id="authButtons">
+                <button class="btn btn-login" onclick="openModal('login')">Login</button>
+                <button class="btn btn-signup" onclick="openModal('register')">Sign Up</button>
+            </div>
+            <div id="userSection" class="hidden">
+                <span class="user-info"><i class="fas fa-user-circle"></i> <span id="userName"></span></span>
+                <button class="btn btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <i class="fas fa-bars mobile-toggle" onclick="toggleMenu()"></i>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
         <h1>Yum Yum</h1>
-            <h2>"Where <br>Every Meal <br>Tells <br>a Story"</h2>
-        <button type="button" class="btn">EXPLORE</button>
-        </div>
-        <div class="vertical-bar">
-          <div class="search-icon">
-            <i class="fa fa-th-list" ></i>
-            <i class="fa fa-search" ></i>
-          </div>  
-          <div class="social-icon">
-            <i class="fa fa-facebook" ></i>
-            <i class="fa fa-instagram" ></i>
-            <i class="fa fa-twitter" ></i>
-            <i class="fa fa-pinterest" ></i>
-          </div>
-        </div>
-        <div class="notifications">
-            <div class="contents">
-                <small>Subscribe easy youtube channel and never miss any updates.
-                </small>
-                <p><a href="">PREV</a><a href="">NEXT</a></p>
+        <p>"Where Every Meal Tells a Story"</p>
+        <button class="btn btn-signup" onclick="document.getElementById('recipes').scrollIntoView({behavior: 'smooth'})">
+            Explore Recipes
+        </button>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <h2 class="section-title">Kategori Kuliner</h2>
+        <div class="category-grid">
+            <div class="category-card active" onclick="filterRecipes('all')">
+                <i class="fas fa-border-all"></i>
+                <h3>Semua</h3>
             </div>
-            <div class="notifications-img">
-           <img src="notification-image.jpg" >
+            <div class="category-card" onclick="filterRecipes('nusantara')">
+                <i class="fas fa-fire"></i>
+                <h3>Nusantara</h3>
+            </div>
+            <div class="category-card" onclick="filterRecipes('western')">
+                <i class="fas fa-hamburger"></i>
+                <h3>Western</h3>
+            </div>
+            <div class="category-card" onclick="filterRecipes('asian')">
+                <i class="fas fa-bowl-rice"></i>
+                <h3>Asian</h3>
+            </div>
+            <div class="category-card" onclick="filterRecipes('dessert')">
+                <i class="fas fa-ice-cream"></i>
+                <h3>Dessert</h3>
+            </div>
+            <div class="category-card" onclick="filterRecipes('beverage')">
+                <i class="fas fa-mug-hot"></i>
+                <h3>Minuman</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="recipes" id="recipes">
+        <h2 class="section-title">Koleksi Resep</h2>
+        <div class="recipe-grid" id="recipeGrid"></div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('login')">&times;</span>
+            <h2>Login</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-submit">Login</button>
+            </form>
+            <div class="modal-footer">
+                Belum punya akun? <a href="#" onclick="switchModal('login', 'register')">Daftar</a>
             </div>
         </div>
     </div>
-<script>
-    var show = document.getElementById("nav-links");
-    function showMenu(){
-        show.style.right="0";
-    }
-    function closeMenu(){
-        show.style.right="-200px";
-    }
-</script>
-</body>
 
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('register')">&times;</span>
+            <h2>Register</h2>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Nama</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" required minlength="6">
+                </div>
+                <button type="submit" class="btn-submit">Register</button>
+            </form>
+            <div class="modal-footer">
+                Sudah punya akun? <a href="#" onclick="switchModal('register', 'login')">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Resep
+        const recipes = [
+            { id: 1, title: 'Nasi Goreng', category: 'nusantara', time: '30 min', difficulty: 'Easy', icon: '🍚' },
+            { id: 2, title: 'Rendang', category: 'nusantara', time: '120 min', difficulty: 'Hard', icon: '🍖' },
+            { id: 3, title: 'Sate Ayam', category: 'nusantara', time: '45 min', difficulty: 'Medium', icon: '�串' },
+            { id: 4, title: 'Burger', category: 'western', time: '25 min', difficulty: 'Easy', icon: '🍔' },
+            { id: 5, title: 'Pasta Carbonara', category: 'western', time: '35 min', difficulty: 'Medium', icon: '🍝' },
+            { id: 6, title: 'Steak', category: 'western', time: '40 min', difficulty: 'Medium', icon: '🥩' },
+            { id: 7, title: 'Ramen', category: 'asian', time: '60 min', difficulty: 'Hard', icon: '🍜' },
+            { id: 8, title: 'Sushi', category: 'asian', time: '50 min', difficulty: 'Hard', icon: '🍣' },
+            { id: 9, title: 'Tom Yum', category: 'asian', time: '40 min', difficulty: 'Medium', icon: '🍲' },
+            { id: 10, title: 'Brownies', category: 'dessert', time: '45 min', difficulty: 'Easy', icon: '🍰' },
+            { id: 11, title: 'Pancake', category: 'dessert', time: '20 min', difficulty: 'Easy', icon: '🥞' },
+            { id: 12, title: 'Es Teh Manis', category: 'beverage', time: '5 min', difficulty: 'Easy', icon: '🧋' },
+        ];
+
+        let currentFilter = 'all';
+        let users = [];
+        let currentUser = null;
+
+        // Render Recipes
+        function renderRecipes(filter = 'all') {
+            const grid = document.getElementById('recipeGrid');
+            const filtered = filter === 'all' ? recipes : recipes.filter(r => r.category === filter);
+            
+            grid.innerHTML = filtered.map(recipe => `
+                <div class="recipe-card">
+                    <div class="recipe-img">${recipe.icon}</div>
+                    <div class="recipe-content">
+                        <span class="recipe-category">${recipe.category}</span>
+                        <h3 class="recipe-title">${recipe.title}</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> ${recipe.time}</span>
+                            <span><i class="fas fa-signal"></i> ${recipe.difficulty}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Recipes
+        function filterRecipes(category) {
+            currentFilter = category;
+            renderRecipes(category);
+            
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.category-card').classList.add('active');
+        }
+
+        // Modal Functions
+        function openModal(type) {
+            document.getElementById(type + 'Modal').classList.add('active');
+        }
+
+        function closeModal(type) {
+            document.getElementById(type + 'Modal').classList.remove('active');
+        }
+
+        function switchModal(from, to) {
+            closeModal(from);
+            openModal(to);
+        }
+
+        // Auth Functions
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (users.find(u => u.email === email)) {
+                alert('Email sudah terdaftar!');
+                return;
+            }
+
+            users.push({ name, email, password });
+            alert('Registrasi berhasil! Silakan login.');
+            switchModal('register', 'login');
+            e.target.reset();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('authButtons').classList.add('hidden');
+                document.getElementById('userSection').classList.remove('hidden');
+                closeModal('login');
+                alert('Login berhasil! Selamat datang ' + user.name);
+                e.target.reset();
+            } else {
+                alert('Email atau password salah!');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('authButtons').classList.remove('hidden');
+            document.getElementById('userSection').classList.add('hidden');
+            alert('Logout berhasil!');
+        }
+
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        // Initialize
+        renderRecipes();
+    </script>
+</body>
 </html>
